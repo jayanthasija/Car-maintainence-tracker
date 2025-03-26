@@ -4,73 +4,65 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
-import { ModeToggle } from "@/components/mode-toggle"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
+const items = [
+  {
+    title: "Dashboard",
+    href: "/",
+  },
+  {
+    title: "Vehicles",
+    href: "/vehicles",
+  },
+  {
+    title: "Services",
+    href: "/services",
+  },
+  {
+    title: "Reports",
+    href: "/reports",
+  },
+]
 
 export function MobileNav() {
-  const [open, setOpen] = React.useState(false)
   const pathname = usePathname()
-
-  const routes = [
-    {
-      href: "/",
-      label: "Dashboard",
-    },
-    {
-      href: "/vehicles",
-      label: "Vehicles",
-    },
-    {
-      href: "/services",
-      label: "Services",
-    },
-    {
-      href: "/reminders",
-      label: "Reminders",
-    },
-  ]
+  const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="flex w-full items-center justify-between md:hidden">
-      <Link href="/" className="flex items-center space-x-2">
-        <span className="font-bold">Car Maintenance</span>
-      </Link>
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle Menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="pr-0">
-          <div className="px-7">
-            <Link href="/" className="flex items-center space-x-2" onClick={() => setOpen(false)}>
-              <span className="font-bold">Car Maintenance Tracker</span>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+        >
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="pr-0">
+        <SheetHeader>
+          <SheetTitle>Car Maintenance Tracker</SheetTitle>
+        </SheetHeader>
+        <nav className="grid gap-2 py-4">
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline",
+                pathname === item.href ? "bg-muted font-medium text-primary" : "text-muted-foreground",
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {item.title}
             </Link>
-          </div>
-          <div className="flex flex-col space-y-3 p-7">
-            {routes.map((route) => (
-              <Link
-                key={route.href}
-                href={route.href}
-                className={cn(
-                  "text-muted-foreground transition-colors hover:text-foreground",
-                  pathname === route.href && "text-foreground",
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {route.label}
-              </Link>
-            ))}
-          </div>
-          <div className="p-7">
-            <ModeToggle />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+          ))}
+        </nav>
+      </SheetContent>
+    </Sheet>
   )
 }
 

@@ -1,16 +1,23 @@
 import type React from "react"
 import "@/app/globals.css"
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
-import { MainNav } from "@/components/main-nav"
-import { MobileNav } from "@/components/mobile-nav"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
-  title: "Car Maintenance Tracker",
-  description: "Track and manage your vehicle maintenance",
+export const metadata: Metadata = {
+  title: {
+    default: "Car Maintenance Tracker",
+    template: "%s | Car Maintenance Tracker",
+  },
+  description: "Track your car maintenance, services, and costs",
+  icons: {
+    icon: "/favicon.ico",
+  },
     generator: 'v0.dev'
 }
 
@@ -20,17 +27,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <div className="flex min-h-screen flex-col">
-            <header className="sticky top-0 z-40 border-b bg-background">
-              <div className="container flex h-16 items-center px-4">
-                <MainNav />
-                <MobileNav />
-              </div>
-            </header>
-            <main className="flex-1 overflow-x-hidden">{children}</main>
+          <div className="relative flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
           </div>
           <Toaster />
         </ThemeProvider>

@@ -1,130 +1,83 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CalendarClock, Check } from "lucide-react"
-import { useToast } from "@/components/ui/use-toast"
-import { useState } from "react"
+import { toast } from "sonner"
+import { CheckCircle2, Clock } from "lucide-react"
 
-type MaintenanceItem = {
-  id: string
-  service: string
-  status: "overdue" | "due-soon" | "scheduled"
-  dueText: string
-  lastMileage: number
-  mileageAgo: number
-}
+const upcomingServices = [
+  {
+    id: "1",
+    vehicle: "Toyota Camry",
+    service: "Oil Change",
+    dueDate: "2024-01-15",
+    daysLeft: 5,
+    mileage: "48,000",
+    estimatedCost: "$45.99",
+  },
+  {
+    id: "2",
+    vehicle: "Honda Civic",
+    service: "Tire Rotation",
+    dueDate: "2024-01-20",
+    daysLeft: 10,
+    mileage: "35,000",
+    estimatedCost: "$25.00",
+  },
+  {
+    id: "3",
+    vehicle: "Toyota Camry",
+    service: "Air Filter Replacement",
+    dueDate: "2024-02-01",
+    daysLeft: 22,
+    mileage: "48,500",
+    estimatedCost: "$15.99",
+  },
+]
 
 export function UpcomingMaintenance() {
-  const { toast } = useToast()
-  const [maintenanceItems, setMaintenanceItems] = useState<MaintenanceItem[]>([
-    {
-      id: "1",
-      service: "Oil Change",
-      status: "overdue",
-      dueText: "Due 5 days ago",
-      lastMileage: 42500,
-      mileageAgo: 2789,
-    },
-    {
-      id: "2",
-      service: "Tire Rotation",
-      status: "due-soon",
-      dueText: "Due in 2 weeks",
-      lastMileage: 40000,
-      mileageAgo: 5289,
-    },
-    {
-      id: "3",
-      service: "Brake Inspection",
-      status: "scheduled",
-      dueText: "Due in 1 month",
-      lastMileage: 35000,
-      mileageAgo: 10289,
-    },
-  ])
-
-  const handleComplete = (id: string, service: string) => {
-    // Remove the item from the list
-    const completedItem = maintenanceItems.find((item) => item.id === id)
-    setMaintenanceItems(maintenanceItems.filter((item) => item.id !== id))
-
-    // Show toast with undo button
-    toast({
-      title: "Service marked as completed",
-      description: `${service} has been marked as completed.`,
-      action: (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            if (completedItem) {
-              setMaintenanceItems((prev) => [...prev, completedItem])
-              toast({
-                title: "Service restored",
-                description: `${service} has been restored to your upcoming list.`,
-              })
-            }
-          }}
-        >
-          Undo
-        </Button>
-      ),
+  const markComplete = (id: string) => {
+    toast("Service marked as complete", {
+      description: "The service has been marked as completed.",
     })
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Upcoming Maintenance</CardTitle>
-        <CardDescription>Services that are due soon based on your schedule</CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-6">
-        {maintenanceItems.map((item) => (
-          <div key={item.id} className="rounded-lg border p-4">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold">{item.service}</h3>
-                  <Badge
-                    variant={
-                      item.status === "overdue" ? "destructive" : item.status === "due-soon" ? "warning" : "default"
-                    }
-                    className="rounded-sm"
-                  >
-                    {item.status === "overdue" ? "Overdue" : item.status === "due-soon" ? "Due Soon" : "Scheduled"}
+    <div className="space-y-3">
+      {upcomingServices.map((service) => (
+        <Card key={service.id} className="overflow-hidden">
+          <CardContent className="p-0">
+            <div className="flex flex-col sm:flex-row">
+              <div className="flex-1 p-3 md:p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h3 className="font-semibold text-sm md:text-base">{service.service}</h3>
+                  <Badge variant={service.daysLeft <= 7 ? "destructive" : "outline"} className="w-fit">
+                    <Clock className="mr-1 h-3 w-3" />
+                    {service.daysLeft} days left
                   </Badge>
                 </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <CalendarClock className="mr-1 h-4 w-4" />
-                  {item.dueText}
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Last completed at {item.lastMileage.toLocaleString()} miles ({item.mileageAgo.toLocaleString()} miles
-                  ago)
-                </p>
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Vehicle: {service.vehicle}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Due: {service.dueDate}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Mileage: {service.mileage}</p>
+                <p className="text-xs md:text-sm font-medium">Est. Cost: {service.estimatedCost}</p>
               </div>
-              <div>
-                <Button size="sm" onClick={() => handleComplete(item.id, item.service)}>
-                  <Check className="mr-2 h-4 w-4" />
-                  Mark Complete
+              <div className="flex sm:flex-col justify-between p-3 md:p-4 bg-muted/50">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs md:text-sm"
+                  onClick={() => markComplete(service.id)}
+                >
+                  <CheckCircle2 className="mr-1 h-3 w-3 md:h-4 md:w-4" />
+                  Complete
                 </Button>
               </div>
             </div>
-          </div>
-        ))}
-
-        {maintenanceItems.length === 0 && (
-          <div className="text-center py-6">
-            <p className="text-muted-foreground">No upcoming maintenance items.</p>
-            <Button className="mt-4" variant="outline">
-              Add Maintenance Reminder
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   )
 }
 

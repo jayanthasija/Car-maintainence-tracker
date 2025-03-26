@@ -1,155 +1,103 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CalendarClock, Car, FileText, History, BarChart3, Bell, Wrench } from "lucide-react"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Overview } from "@/components/overview"
+import { RecentServices } from "@/components/recent-services"
 import { UpcomingMaintenance } from "@/components/upcoming-maintenance"
-import { MaintenanceHistory } from "@/components/maintenance-history"
-import { MileageTracker } from "@/components/mileage-tracker"
-import { VehicleSelector } from "@/components/vehicle-selector"
+import { PlusCircle } from "lucide-react"
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Car Maintenance Tracker",
+  description: "Track your car maintenance, services, and costs",
+}
+
+export default function DashboardPage() {
   return (
-    <div className="container px-4 py-6 mx-auto max-w-full md:max-w-7xl overflow-x-hidden">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Car Maintenance Dashboard</h1>
-            <p className="text-muted-foreground">Track, manage, and stay on top of your vehicle maintenance</p>
-          </div>
-          <div className="flex gap-2">
-            <Button asChild>
-              <Link href="/add-service">
-                <Wrench className="mr-2 h-4 w-4" />
-                Log Service
-              </Link>
-            </Button>
-            <VehicleSelector />
-          </div>
+    <div className="flex flex-col gap-4 p-4 md:p-8">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">Track your vehicle maintenance, services, and costs.</p>
         </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Services</CardTitle>
-              <Wrench className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">24</div>
-              <p className="text-xs text-muted-foreground">+2 from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Current Mileage</CardTitle>
-              <Car className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">45,289 mi</div>
-              <p className="text-xs text-muted-foreground">+350 from last week</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Upcoming Services</CardTitle>
-              <CalendarClock className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3</div>
-              <p className="text-xs text-muted-foreground">Oil change due in 2 weeks</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$2,450</div>
-              <p className="text-xs text-muted-foreground">+$180 from last month</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Tabs defaultValue="upcoming" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto">
-            <TabsTrigger value="upcoming" className="py-2">
-              <Bell className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Upcoming</span>
-            </TabsTrigger>
-            <TabsTrigger value="history" className="py-2">
-              <History className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">History</span>
-            </TabsTrigger>
-            <TabsTrigger value="mileage" className="py-2">
-              <Car className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Mileage</span>
-            </TabsTrigger>
-            <TabsTrigger value="documents" className="py-2">
-              <FileText className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Documents</span>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="upcoming" className="mt-6">
-            <UpcomingMaintenance />
-          </TabsContent>
-          <TabsContent value="history" className="mt-6">
-            <MaintenanceHistory />
-          </TabsContent>
-          <TabsContent value="mileage" className="mt-6">
-            <MileageTracker />
-          </TabsContent>
-          <TabsContent value="documents" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Documents</CardTitle>
-                <CardDescription>Store and access important vehicle documents</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-6">
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">Owner's Manual</p>
-                        <p className="text-sm text-muted-foreground">PDF • 4.2 MB</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">Insurance Policy</p>
-                        <p className="text-sm text-muted-foreground">PDF • 1.8 MB</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">Last Service Receipt</p>
-                        <p className="text-sm text-muted-foreground">PDF • 0.5 MB</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
-                  </div>
-                </div>
-                <Button className="w-full">Upload New Document</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <Link href="/vehicles/add">
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add Vehicle
+          </Button>
+        </Link>
       </div>
+
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">Total Vehicles</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl md:text-2xl font-bold">2</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">Total Services</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl md:text-2xl font-bold">12</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">Upcoming Services</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl md:text-2xl font-bold">3</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">Total Spent</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl md:text-2xl font-bold">$1,234.56</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="lg:col-span-4">
+          <CardHeader>
+            <CardTitle>Maintenance Costs</CardTitle>
+            <CardDescription>Your maintenance costs over the past 12 months</CardDescription>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <Overview />
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Upcoming Maintenance</CardTitle>
+            <CardDescription>Services due in the next 30 days</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UpcomingMaintenance />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Services</CardTitle>
+          <CardDescription>Your most recent maintenance services</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RecentServices />
+        </CardContent>
+        <CardFooter>
+          <Link href="/services">
+            <Button variant="outline">View All Services</Button>
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
